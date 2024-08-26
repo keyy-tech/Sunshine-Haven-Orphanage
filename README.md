@@ -75,6 +75,13 @@ For any inquiries, please contact:
 - Email: emmanuelyayrakotoka@gmail.com
 - GitHub: [keyy-tech](https://github.com/keyy-tech)
 
+
+## Note
+1. After forking the repository.
+2. Put the file into you htdocs folder if you are using xammp or www folder if you are using wammp or ammps
+3. Create a username called bday.
+4. Create a password called bday.
+5. Run the sql code in the workbench.
 ---
 
 Thank you for using the Sunshine Haven Orphanage Management System!
