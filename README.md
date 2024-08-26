@@ -1,5 +1,5 @@
 
-# Sunshine Haven OrphanageManagement System
+# Sunshine Haven Orphanage Management System
 
 
 
@@ -23,12 +23,12 @@ The **Sunshine Haven Orphanage Management System** is a full-featured CRUD (Crea
 ## Installation
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/keyy-tech/sunshine-haven-orphanage.git
+   git clone https://github.com/keyy-tech/Sunshine-Haven-Orphanage.git
    ```
 2. **Import the SQL File** 
    - Open your preferred SQL database management tool. 
-   - Create a new database (e.g., `sunshine_shelter_db`). 
-   - Import the `Sunshine Shelter Orphanage.sql` file into the newly created database.
+   - Create a new database (e.g., `sunshine_haven_orphanage_db`). 
+   - Import the `How about "Sunshine Haven Orphanage".sql` file into the newly created database.
 
 3. **Set Up the Application** 
    - Install necessary dependencies (if applicable). 
@@ -77,4 +77,4 @@ For any inquiries, please contact:
 
 ---
 
-Thank you for using the Sunshine Haven OrphanageManagement System!
+Thank you for using the Sunshine Haven Orphanage Management System!
