@@ -1,8 +1,8 @@
 <?php
 
 $localhost = "localhost";
-$username = "keyy_tech";
-$password = "";
+$username = "bday";
+$password = "bday";
 $dbname = "sunshine_haven_orphanage";
 
 $config = mysqli_connect($localhost, $username, $password, $dbname);
