@@ -1,5 +1,5 @@
-CREATE DATABASE SunshineShelter;
-USE SunshineShelter;
+CREATE DATABASE Sunshine_Haven_Orphanage;
+USE Sunshine_Haven_Orphanage;
 
 CREATE TABLE Children (
     ChildID INT AUTO_INCREMENT PRIMARY KEY,

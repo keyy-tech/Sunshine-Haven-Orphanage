@@ -1,10 +1,10 @@
 
-# Sunshine Shelter Orphanage Management System
+# Sunshine Haven OrphanageManagement System
 
 
 
 ## Overview
-The **Sunshine Shelter Orphanage Management System** is a full-featured CRUD (Create, Read, Update, Delete) application designed to manage various aspects of an orphanage. Built with SQL for the database and Bootstrap for the front-end, this system provides an efficient way to manage information related to children, staff, donors, inventory, events, and finances.
+The **Sunshine Haven Orphanage Management System** is a full-featured CRUD (Create, Read, Update, Delete) application designed to manage various aspects of an orphanage. Built with SQL for the database and Bootstrap for the front-end, this system provides an efficient way to manage information related to children, staff, donors, inventory, events, and finances.
 
 ## Features
 - **Child Management**: Create, view, update, and delete records of children in the orphanage. 
@@ -77,4 +77,4 @@ For any inquiries, please contact:
 
 ---
 
-Thank you for using the Sunshine Shelter Orphanage Management System!
+Thank you for using the Sunshine Haven OrphanageManagement System!

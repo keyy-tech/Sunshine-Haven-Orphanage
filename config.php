@@ -3,7 +3,7 @@
 $localhost = "localhost";
 $username = "keyy_tech";
 $password = "";
-$dbname = "sunshine_shelter";
+$dbname = "sunshine_haven_orphanage";
 
 $config = mysqli_connect($localhost, $username, $password, $dbname);
 
