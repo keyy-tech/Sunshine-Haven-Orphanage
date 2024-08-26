@@ -1,7 +1,7 @@
 
 # Sunshine Shelter Orphanage Management System
 
-![Orphanage Management System](https://your-image-url.com)
+
 
 ## Overview
 The **Sunshine Shelter Orphanage Management System** is a full-featured CRUD (Create, Read, Update, Delete) application designed to manage various aspects of an orphanage. Built with SQL for the database and Bootstrap for the front-end, this system provides an efficient way to manage information related to children, staff, donors, inventory, events, and finances.
