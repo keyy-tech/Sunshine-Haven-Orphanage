@@ -23,7 +23,7 @@ The **Sunshine Shelter Orphanage Management System** is a full-featured CRUD (Cr
 ## Installation
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/sunshine-shelter-orphanage.git
+   git clone https://github.com/keyy-tech/sunshine-shelter-orphanage.git
    ```
 2. **Import the SQL File** 
    - Open your preferred SQL database management tool. 
