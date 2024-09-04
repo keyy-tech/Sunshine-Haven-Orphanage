@@ -1,3 +1,6 @@
+<?php
+include 'connection/db_connect.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,6 +19,39 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 mb-3 border-bottom">
             <h1 class="h4">Adoption</h1>
         </div>
+
+        <form action="" method="post">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingFullName" name="full_name" placeholder="Full Name" required>
+                <label for="floatingFullName">Child ID</label>
+                <div class="invalid-feedback">
+                    Please provide a full name.
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingFullName" name="full_name" placeholder="Full Name" required>
+                <label for="floatingFullName">Adoptive Family ID</label>
+                <div class="invalid-feedback">
+                    Please provide a full name.
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingFullName" name="full_name" placeholder="Full Name" required>
+                <label for="floatingFullName">Status</label>
+                <div class="invalid-feedback">
+                    Please provide a full name.
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="date" class="form-control" id="dob" name="dob" required>
+                <label for="dob">Date Of Placement</label>
+                <div class="invalid-feedback">
+                    Please provide a valid date of birth.
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-1">Add Adoptions</button>
+        </form>
+
     </main>
 </body>
 

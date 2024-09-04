@@ -1,3 +1,23 @@
+<?php
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+
+    $admin_username = 'admin';
+    $admin_password = 'admin';
+
+    if ($username === $admin_username && $password === $admin_password) {
+        $_SESSION['admin_logged_in'] = true;
+        header("Location: dashboard.php");
+        exit();
+    } else {
+        $error = "Invalid username or password.";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,8 +60,8 @@
         <?php endif; ?>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="mb-3">
-                <label for="text" class="form-label">Staff ID</label>
-                <input type="text" class="form-control" id="email" name="email" required>
+                <label for="text" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>

@@ -1,3 +1,7 @@
+<?php
+include 'connection/db_connect.php';
+include 'connection/db_protect.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 

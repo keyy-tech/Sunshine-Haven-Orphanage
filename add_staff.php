@@ -1,5 +1,7 @@
 <?php
-include 'connections/db_connect.php';
+include 'connection/db_connect.php';
+
+
 
 // Initialize message variable
 $message = '';
@@ -57,7 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php include 'sidebar.php'; ?>
     <main>
         <div class="container">
-            <h1 class="mb-3 text-center border-bottom pb-1">Staff</h1>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 mb-3 border-bottom">
+                <h1 class="h4">Staff</h1>
+            </div>
 
             <?php if (!empty($message)): ?>
                 <div class="alert <?php echo $alert_class; ?> alert-dismissible fade show" role="alert">
@@ -80,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="floatingRole">Role</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <textarea class="form-control h-100" id="certification" name="certification" rows="10" placeholder="Certifications" required></textarea>
+                    <textarea class="form-control" id="certification" name="certification" rows="10" placeholder="Certifications" required></textarea>
                     <label for="certification">Certifications</label>
                 </div>
                 <button type="submit" class="btn btn-primary mt-1">Add Staff</button>

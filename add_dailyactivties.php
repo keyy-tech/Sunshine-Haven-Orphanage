@@ -1,3 +1,7 @@
+<?php
+include 'connection/db_connect.php';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +19,9 @@
     <?php include 'sidebar.php'; ?>
     <main>
         <div class="container">
-            <h1 class="mb-3 text-center border-bottom pb-1">Daily Activities</h1>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 mb-3 border-bottom">
+                <h1 class="h4">Daily Actvites</h1>
+            </div>
             <form action="" method="post">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingFullName" name="full_name" placeholder="Full Name" required>
@@ -46,7 +52,7 @@
                     <label for="floatingSelectGender">Activity Type</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <textarea class="form-control h-100" id="details" name="details" rows="10" placeholder="Details" required></textarea>
+                    <textarea class="form-control" id="details" name="details" rows="10" placeholder="Details" required></textarea>
                     <label for="details">Details</label>
                 </div>
                 <button type="submit" class="btn btn-primary mt-1">Add Activites</button>

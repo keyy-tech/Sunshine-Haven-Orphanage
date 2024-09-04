@@ -1,6 +1,7 @@
 <?php
 include 'connections/db_connect.php';
 
+
 // Initialize message variable
 $message = '';
 $alert_class = '';
@@ -59,7 +60,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php include 'sidebar.php'; ?>
     <main>
         <div class="container">
-            <h1 class="mb-3 text-center border-bottom pb-1">Children</h1>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 mb-3 border-bottom">
+                <h1 class="h4">Children</h1>
+            </div>
 
             <?php if (!empty($message)): ?>
                 <div class="alert <?php echo $alert_class; ?> alert-dismissible fade show" role="alert">
@@ -102,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
                 <div class="form-floating mb-3">
-                    <textarea class="form-control h-50" id="special_needs" name="special_needs" rows="10" placeholder="Special Needs"></textarea>
+                    <textarea class="form-control" id="special_needs" name="special_needs" rows="10" placeholder="Special Needs"></textarea>
                     <label for="special_needs">Special Needs</label>
                     <div class="invalid-feedback">
                         Please provide special needs information if applicable.
