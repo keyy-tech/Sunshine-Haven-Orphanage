@@ -1,6 +1,5 @@
 <?php
-include 'connection/db_connect.php';
-include 'connection/db_protect.php';
+include 'connections/db_connect.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

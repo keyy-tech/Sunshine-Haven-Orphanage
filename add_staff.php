@@ -1,5 +1,5 @@
 <?php
-include 'connection/db_connect.php';
+include 'connections/db_connect.php';
 
 
 
