@@ -20,12 +20,12 @@
                     Childrens' Record
                 </a>
             </li>
-            <li class="nav-item mb-3">
+            <!-- <li class="nav-item mb-3">
                 <a href="view_staff.php" class="nav-link text-white">
                     <i class="bi bi-people me-2"></i>
                     Staffs' Records
                 </a>
-            </li>
+            </li> -->
             <li class="nav-item mb-3">
                 <a href="view_dailyactivties.php" class="nav-link text-white">
                     <i class="bi bi-envelope-fill me-2"></i>

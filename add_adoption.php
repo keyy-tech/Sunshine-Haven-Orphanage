@@ -2,30 +2,53 @@
 include 'connections/db_connect.php';
 
 $message = '';
+$alert_class = '';
 
+// Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $child_id = $_POST['child_id'];
     $family_id = $_POST['family_id'];
     $status = $_POST['status'];
     $date_of_placement = $_POST['date_of_placement']; // New field
 
-    // Prepare the SQL statement
-    $sql = "INSERT INTO Adoption (child_id, family_id, status, date_of_placement) 
-            VALUES (?, ?, ?, ?)";
+    // Check if the child is already adopted
+    $check_query = "SELECT id FROM Adoption WHERE child_id = ?";
+    if ($check_stmt = $db_connect->prepare($check_query)) {
+        $check_stmt->bind_param("i", $child_id);
+        $check_stmt->execute();
+        $check_stmt->store_result();
 
-    if ($stmt = $db_connect->prepare($sql)) {
-        $stmt->bind_param("iiss", $child_id, $family_id, $status, $date_of_placement);
-
-        // Execute the query
-        if ($stmt->execute()) {
-            $message = "Adoption record added successfully.";
+        if ($check_stmt->num_rows > 0) {
+            $message = "Error: This child has already been adopted.";
+            $alert_class = 'alert-danger';
         } else {
-            $message = "Error: " . $stmt->error;
+            // Prepare the SQL statement for insertion
+            $sql = "INSERT INTO Adoption (child_id, family_id, status, date_of_placement) 
+                    VALUES (?, ?, ?, ?)";
+
+            if ($stmt = $db_connect->prepare($sql)) {
+                $stmt->bind_param("iiss", $child_id, $family_id, $status, $date_of_placement);
+
+                // Execute the query
+                if ($stmt->execute()) {
+                    $message = "Adoption record added successfully.";
+                    $alert_class = 'alert-success';
+                } else {
+                    $message = "Error: " . $stmt->error;
+                    $alert_class = 'alert-danger';
+                }
+
+                $stmt->close();
+            } else {
+                $message = "Error preparing statement: " . $db_connect->error;
+                $alert_class = 'alert-danger';
+            }
         }
 
-        $stmt->close();
+        $check_stmt->close();
     } else {
-        $message = "Error preparing statement: " . $db_connect->error;
+        $message = "Error preparing check statement: " . $db_connect->error;
+        $alert_class = 'alert-danger';
     }
 }
 ?>
@@ -55,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         <?php endif; ?>
+
         <form action="" method="post" class="form-floating border-success p-3 shadow-lg needs-validation text-bg-light rounded-4" novalidate>
             <div class="form-floating mb-3">
                 <input type="number" class="form-control" id="child_id" name="child_id" placeholder="Child ID" required>
@@ -85,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
             </div>
             <button type="submit" class="btn btn-outline-primary mt-1">Save Record</button>
-            <a href="view_adoptions.php" class="btn btn-outline-secondary mt-1 ms-3">View Records</a>
+            <a href="view_adoption.php" class="btn btn-outline-secondary mt-1 ms-3">View Records</a>
         </form>
     </main>
 </body>

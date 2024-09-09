@@ -20,12 +20,12 @@
                     Children
                 </a>
             </li>
-            <li class="nav-item mb-3">
+            <!-- <li class="nav-item mb-3">
                 <a href="add_staff.php" class="nav-link text-white">
                     <i class="bi bi-people me-2"></i>
                     Staff
                 </a>
-            </li>
+            </li> -->
             <li class="nav-item mb-3">
                 <a href="add_dailyactivties.php" class="nav-link text-white">
                     <i class="bi bi-envelope-fill me-2"></i>

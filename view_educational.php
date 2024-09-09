@@ -32,67 +32,76 @@ if (!$result) {
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 mb-3 border-bottom">
                 <h1 class="h4">Educational Progress Records</h1>
             </div>
-        </div>
-        <a href="add_educational.php" class="btn btn-outline-success mb-3 mt-2">
-            Add New Record</a>
-        <table class="table table-default table-striped table-hover border container">
-            <thead class="p-3">
-                <tr>
-                    <th scope="col">Record ID</th>
-                    <th scope="col">Child Name</th>
-                    <th scope="col">Grade Level</th>
-                    <th scope="col">School Attendance</th>
-                    <th scope="col">Academic Achievements</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $ID = $row['id'];
-                    $NAME = $row['full_name'];
-                    $GRADE_LEVEL = $row['grade_level'];
-                    $SCHOOL_ATTENDANCE = $row['school_attendance'];
-                    $ACHIEVEMENTS = $row['academic_achievements'];
-                ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($ID); ?></td>
-                        <td><?php echo htmlspecialchars($NAME); ?></td>
-                        <td><?php echo htmlspecialchars($GRADE_LEVEL); ?></td>
-                        <td><?php echo htmlspecialchars($SCHOOL_ATTENDANCE); ?></td>
-                        <td><?php echo htmlspecialchars($ACHIEVEMENTS); ?></td>
-                        <td>
-                            <a href="update_educational.php?id=<?php echo urlencode($ID); ?>" type="button" class="btn btn-outline-primary">Update</a>
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?php echo $ID; ?>">
-                                Delete
-                            </button>
 
-                            <!-- Delete Modal -->
-                            <div class="modal fade" id="deleteModal<?php echo $ID; ?>" tabindex="-1" aria-labelledby="deleteModalLabel<?php echo $ID; ?>" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="deleteModalLabel<?php echo $ID; ?>">Confirm Deletion</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want to delete this record? This action cannot be undone.
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                            <a href="delete_educational.php?id=<?php echo urlencode($ID); ?>" type="button" class="btn btn-danger">Confirm Delete</a>
+            <?php
+            if (isset($_GET['message'])) {
+                echo '<div class="alert alert-success" role="alert">';
+                echo htmlspecialchars($_GET['message']);
+                echo '</div>';
+            }
+            ?>
+
+            <a href="add_educational.php" class="btn btn-outline-success mb-3 mt-2">Add New Record</a>
+
+            <table class="table table-default table-striped table-hover border container">
+                <thead class="p-3">
+                    <tr>
+                        <th scope="col">Record ID</th>
+                        <th scope="col">Child Name</th>
+                        <th scope="col">Grade Level</th>
+                        <th scope="col">School Attendance</th>
+                        <th scope="col">Academic Achievements</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $ID = $row['id'];
+                        $NAME = $row['full_name'];
+                        $GRADE_LEVEL = $row['grade_level'];
+                        $SCHOOL_ATTENDANCE = $row['school_attendance'];
+                        $ACHIEVEMENTS = $row['academic_achievements'];
+                    ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($ID); ?></td>
+                            <td><?php echo htmlspecialchars($NAME); ?></td>
+                            <td><?php echo htmlspecialchars($GRADE_LEVEL); ?></td>
+                            <td><?php echo htmlspecialchars($SCHOOL_ATTENDANCE); ?></td>
+                            <td><?php echo htmlspecialchars($ACHIEVEMENTS); ?></td>
+                            <td>
+                                <a href="update_educational.php?id=<?php echo urlencode($ID); ?>" type="button" class="btn btn-outline-primary">Update</a>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?php echo $ID; ?>">
+                                    Delete
+                                </button>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteModal<?php echo $ID; ?>" tabindex="-1" aria-labelledby="deleteModalLabel<?php echo $ID; ?>" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="deleteModalLabel<?php echo $ID; ?>">Confirm Deletion</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete this record? This action cannot be undone.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <a href="delete_educational.php?id=<?php echo urlencode($ID); ?>" type="button" class="btn btn-danger">Confirm Delete</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                <?php
-                }
-                ?>
-            </tbody>
-        </table>
+                            </td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </main>
 </body>
 

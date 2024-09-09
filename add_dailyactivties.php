@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="time">Time</label>
                 </div>
                 <button type="submit" class="btn btn-outline-primary mt-1">Save Record</button>
-                <a href="view_dailyactivities.php" class="btn btn-outline-secondary mt-1 ms-3">View Records</a>
+                <a href="view_dailyactivties.php" class="btn btn-outline-secondary mt-1 ms-3">View Records</a>
             </form>
         </div>
     </main>
