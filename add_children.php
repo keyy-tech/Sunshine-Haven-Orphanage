@@ -1,7 +1,6 @@
 <?php
 include 'connections/db_connect.php';
 
-
 // Initialize message variable
 $message = '';
 $alert_class = '';
@@ -15,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $special_needs = $_POST["special_needs"];
 
     // Check for duplicate record
-    $stmt = $conn->prepare("SELECT * FROM children WHERE full_name = ? AND dob = ?");
+    $stmt = $db_connect->prepare("SELECT * FROM children WHERE full_name = ? AND dob = ?");
     $stmt->bind_param("ss", $full_name, $dob);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -26,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $alert_class = "alert-danger";
     } else {
         // Prepare and bind
-        $stmt = $conn->prepare("INSERT INTO children (full_name, dob, gender, nationality, special_needs) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $db_connect->prepare("INSERT INTO children (full_name, dob, gender, nationality, special_needs) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("sssss", $full_name, $dob, $gender, $nationality, $special_needs);
 
         // Execute and check if the record was added successfully
@@ -40,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $stmt->close();
     }
-    $conn->close();
+    $db_connect->close();
 }
 ?>
 
@@ -71,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             <?php endif; ?>
 
-            <form action="" method="post">
+            <form action="" method="post" class="form-floating border-success p-3 shadow-lg needs-validation text-bg-light rounded-4" novalidate>
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingFullName" name="full_name" placeholder="Full Name" required>
                     <label for="floatingFullName">Name</label>
@@ -104,18 +103,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         Please provide a nationality.
                     </div>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="mb-3">
                     <textarea class="form-control" id="special_needs" name="special_needs" rows="10" placeholder="Special Needs"></textarea>
                     <label for="special_needs">Special Needs</label>
-                    <div class="invalid-feedback">
-                        Please provide special needs information if applicable.
-                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-1">Add Child</button>
+                <button type="submit" class="btn btn-outline-primary mt-1">Save Record</button>
+                <a href="view_children.php" class="btn btn-outline-secondary mt-1 ms-3">View Records</a>
             </form>
 
         </div>
     </main>
 </body>
+<script>
+    (function() {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+    })();
+</script>
 
 </html>

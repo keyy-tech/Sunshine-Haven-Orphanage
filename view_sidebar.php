@@ -15,57 +15,57 @@
                 </a>
             </li>
             <li class="nav-item mb-3">
-                <a href="add_children.php" class="nav-link text-white">
+                <a href="view_children.php" class="nav-link text-white">
                     <i class="bi bi-person-plus me-2"></i>
-                    Children
+                    Childrens' Record
                 </a>
             </li>
             <li class="nav-item mb-3">
-                <a href="add_staff.php" class="nav-link text-white">
+                <a href="view_staff.php" class="nav-link text-white">
                     <i class="bi bi-people me-2"></i>
-                    Staff
+                    Staffs' Records
                 </a>
             </li>
             <li class="nav-item mb-3">
-                <a href="add_dailyactivties.php" class="nav-link text-white">
+                <a href="view_dailyactivties.php" class="nav-link text-white">
                     <i class="bi bi-envelope-fill me-2"></i>
-                    Daily Activities
+                    View Daily Activities
                 </a>
             </li>
             <li class="nav-item mb-3">
-                <a href="add_medicalhistory.php" class="nav-link text-white">
+                <a href="view_medicalhistory.php" class="nav-link text-white">
                     <i class="bi bi-file-medical me-2"></i>
-                    Medical History
+                    View Medical History
                 </a>
             </li>
             <li class="nav-item mb-3">
-                <a href="add_educational.php" class="nav-link text-white">
+                <a href="view_educational.php" class="nav-link text-white">
                     <i class="bi bi-book-half me-2"></i>
-                    Education Progress
+                    View Education Progress
                 </a>
             </li>
             <li class="nav-item mb-3">
-                <a href="add_families.php" class="nav-link text-white">
+                <a href="view_families.php" class="nav-link text-white">
                     <i class="bi bi-people-fill me-2"></i>
-                    Family
+                    Family's Records
                 </a>
             </li>
             <li class="nav-item mb-3">
-                <a href="add_adoption.php" class="nav-link text-white">
+                <a href="view_adoption.php" class="nav-link text-white">
                     <i class="bi bi-heart me-2"></i>
-                    Adoption
+                    View Adoptions
                 </a>
             </li>
             <li class="nav-item mb-3">
-                <a href="add_donations.php" class="nav-link text-white">
+                <a href="view_donations.php" class="nav-link text-white">
                     <i class="bi bi-cash me-2"></i>
-                    Donations
+                    View Donations
                 </a>
             </li>
         </ul>
         <div class="sidebar-footer">
             <ul class="nav flex-column mb-auto">
-                <!--      <li class="nav-item mb-1">
+                <!--     <li class="nav-item mb-1">
                     <a href="view_profile.php" class="nav-link text-white">
                         <i class="bi bi-person me-2"></i>
                         View Profile

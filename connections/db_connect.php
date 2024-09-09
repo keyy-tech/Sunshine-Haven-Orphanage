@@ -5,9 +5,9 @@ $password = "bday";
 $dbname = "ChildCareCenter";
 
 // Create connection
-$conn = mysqli_connect($localhost, $username, $password, $dbname);
+$db_connect = mysqli_connect($localhost, $username, $password, $dbname);
 
-
-if (!$conn) {
+// Check connection
+if (!$db_connect) {
     die("Connection failed: " . mysqli_connect_error());
 }

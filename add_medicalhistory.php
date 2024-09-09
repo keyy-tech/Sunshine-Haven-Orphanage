@@ -1,7 +1,49 @@
 <?php
 include 'connections/db_connect.php';
 
+// Initialize message variable
+$message = '';
+$alert_class = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve form data
+    $child_id = trim($_POST["child_id"]);
+    $record_date = trim($_POST["record_date"]);
+    $vaccination = trim($_POST["vaccination"]);
+    $allergies = trim($_POST["allergies"]);
+    $treatments = trim($_POST["treatments"]);
+
+    // Check if record already exists
+    $stmt = $db_connect->prepare("SELECT * FROM MedicalRecords WHERE child_id = ? AND record_date = ?");
+    $stmt->bind_param("is", $child_id, $record_date);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Duplicate record found
+        $message = "Record for this child on this date already exists!";
+        $alert_class = "alert-danger";
+    } else {
+        // Prepare and bind
+        $stmt = $db_connect->prepare("INSERT INTO MedicalRecords (child_id, record_date, details) VALUES (?, ?, ?)");
+        $details = "Vaccination: $vaccination\nAllergies: $allergies\nTreatments: $treatments";
+        $stmt->bind_param("iss", $child_id, $record_date, $details);
+
+        // Execute and check if the record was added successfully
+        if ($stmt->execute()) {
+            $message = "Medical history record added successfully";
+            $alert_class = "alert-success";
+        } else {
+            $message = "Error: " . $stmt->error;
+            $alert_class = "alert-danger";
+        }
+
+        $stmt->close();
+    }
+    $db_connect->close();
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,47 +62,71 @@ include 'connections/db_connect.php';
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 mb-3 border-bottom">
             <h1 class="h4">Medical History</h1>
         </div>
-        <form action="" method="post">
+
+        <?php if (!empty($message)): ?>
+            <div class="alert <?php echo $alert_class; ?> alert-dismissible fade show" role="alert">
+                <?php echo $message; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
+        <form action="" method="post" class="form-floating border-success p-3 shadow-lg needs-validation text-bg-light rounded-4" novalidate>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingFullName" name="full_name" placeholder="Full Name" required>
-                <label for="floatingFullName">Child ID</label>
+                <input type="number" class="form-control" id="floatingChildID" name="child_id" placeholder="Child ID" required>
+                <label for="floatingChildID">Child ID</label>
                 <div class="invalid-feedback">
-                    Please provide a full name.
+                    Please provide the Child ID.
                 </div>
             </div>
             <div class="form-floating mb-3">
-                <input type="date" class="form-control" id="dob" name="dob" required>
-                <label for="dob">Date</label>
+                <input type="date" class="form-control" id="recordDate" name="record_date" required>
+                <label for="recordDate">Date</label>
                 <div class="invalid-feedback">
-                    Please provide a valid date of birth.
+                    Please provide a valid date.
                 </div>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="special_needs" name="special_needs" rows="10" placeholder="Special Needs"></textarea>
-                <label for="special_needs">Vaccination</label>
+                <textarea class="form-control" id="vaccination" name="vaccination" rows="3" placeholder="Vaccination"></textarea>
+                <label for="vaccination">Vaccination</label>
                 <div class="invalid-feedback">
-                    Please provide special needs information if applicable.
+                    Please provide vaccination details.
                 </div>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="special_needs" name="special_needs" rows="10" placeholder="Special Needs"></textarea>
-                <label for="special_needs">Allergies</label>
+                <textarea class="form-control" id="allergies" name="allergies" rows="3" placeholder="Allergies"></textarea>
+                <label for="allergies">Allergies</label>
                 <div class="invalid-feedback">
-                    Please provide special needs information if applicable.
+                    Please provide allergies details.
                 </div>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="special_needs" name="special_needs" rows="10" placeholder="Special Needs"></textarea>
-                <label for="special_needs">Treatments</label>
+                <textarea class="form-control" id="treatments" name="treatments" rows="3" placeholder="Treatments"></textarea>
+                <label for="treatments">Treatments</label>
                 <div class="invalid-feedback">
-                    Please provide special needs information if applicable.
+                    Please provide treatments details.
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary mt-1">Add Medical History</button>
+            <button type="submit" class="btn btn-outline-primary mt-1">Save Record</button>
+            <a href="view_medicalhistory.php" class="btn btn-outline-secondary mt-1 ms-3">View Records</a>
         </form>
-        </div>
     </main>
 </body>
+<script>
+    (function() {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+    })();
+</script>
 
 </html>

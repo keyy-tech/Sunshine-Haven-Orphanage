@@ -1,46 +1,3 @@
-<?php
-include 'connections/db_connect.php';
-
-// Initialize message variable
-$message = '';
-$alert_class = '';
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
-    $name = trim($_POST["name"]);
-    $contact_info = trim($_POST["contact_info"]);
-    $role = trim($_POST["role"]);
-    $certifications = trim($_POST["certifications"]);
-
-    // Check for duplicate record
-    $stmt = $db_connect->prepare("SELECT * FROM Staff WHERE name = ? AND contact_info = ?");
-    $stmt->bind_param("ss", $name, $contact_info);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        // Duplicate record found
-        $message = "Record already exists!";
-        $alert_class = "alert-danger";
-    } else {
-        // Prepare and bind
-        $stmt = $db_connect->prepare("INSERT INTO Staff (name, contact_info, role, certifications) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $name, $contact_info, $role, $certifications);
-
-        // Execute and check if the record was added successfully
-        if ($stmt->execute()) {
-            $message = "New staff member added successfully";
-            $alert_class = "alert-success";
-        } else {
-            $message = "Error: " . $stmt->error;
-            $alert_class = "alert-danger";
-        }
-
-        $stmt->close();
-    }
-    $db_connect->close();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <main>
         <div class="container">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 mb-3 border-bottom">
-                <h1 class="h4">Staff</h1>
+                <h1 class="h4">Update Staff</h1>
             </div>
 
             <?php if (!empty($message)): ?>
@@ -70,11 +27,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <form action="" method="post" class="form-floating border-success p-3 shadow-lg needs-validation text-bg-light rounded-4" novalidate>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingName" name="name" placeholder="Name" required>
-                    <label for="floatingName">Name</label>
+                    <input type="text" class="form-control" id="floatingFullName" name="full_name" placeholder="Full Name" required>
+                    <label for="floatingFullName">Name</label>
                 </div>
                 <div class="form-floating mb-3 mt-3">
-                    <input type="text" class="form-control" id="floatingContactInfo" name="contact_info" placeholder="Contact Information" required>
+                    <input type="text" class="form-control" id="floatingContactInfo" name="contactinfo" placeholder="Contact Information" required>
                     <label for="floatingContactInfo">Contact Information</label>
                 </div>
                 <div class="form-floating mb-3 mt-3">
@@ -82,8 +39,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="floatingRole">Role</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <textarea class="form-control" id="certifications" name="certifications" rows="10" placeholder="Certifications" required></textarea>
-                    <label for="certifications">Certifications</label>
+                    <textarea class="form-control" id="certification" name="certification" rows="10" placeholder="Certifications" required></textarea>
+                    <label for="certification">Certifications</label>
                 </div>
                 <button type="submit" class="btn btn-outline-primary mt-1">Save Record</button>
                 <a href="view_staff.php" class="btn btn-outline-secondary mt-1 ms-3">View Records</a>
