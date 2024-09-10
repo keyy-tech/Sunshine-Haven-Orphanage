@@ -1,17 +1,6 @@
 CREATE DATABASE childcarecenter;
 
-USE childcharecenter;
-CREATE TABLE `adoption` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `child_id` int(11) DEFAULT NULL,
-  `family_id` int(11) DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
-  `date_of_placement` date DEFAULT NULL,
-  `placement_date` date DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `child_id` (`child_id`),
-  CONSTRAINT `adoption_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`)
-);
+USE childcarecenter;
 
 CREATE TABLE `children` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -21,7 +10,7 @@ CREATE TABLE `children` (
   `nationality` varchar(50) DEFAULT NULL,
   `special_needs` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `dailyactivities` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -30,17 +19,19 @@ CREATE TABLE `dailyactivities` (
   `time` time DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `child_id` (`child_id`),
-  CONSTRAINT `dailyactivities_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`)
-);
+  CONSTRAINT `dailyactivities_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `donations` (
+CREATE TABLE `medicalrecords` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `amount` decimal(10,2) NOT NULL,
-  `purpose` varchar(255) NOT NULL,
-  `donation_date` date NOT NULL,
-  PRIMARY KEY (`id`)
-);
+  `child_id` int(11) DEFAULT NULL,
+  `record_date` date DEFAULT NULL,
+  `details` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `child_id` (`child_id`),
+  CONSTRAINT `medicalrecords_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `educationalprogress` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `child_id` int(11) DEFAULT NULL,
@@ -49,8 +40,20 @@ CREATE TABLE `educationalprogress` (
   `academic_achievements` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `child_id` (`child_id`),
-  CONSTRAINT `educationalprogress_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`)
-);
+  CONSTRAINT `educationalprogress_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `adoption` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `child_id` int(11) DEFAULT NULL,
+  `family_id` int(11) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `date_of_placement` date DEFAULT NULL,
+  `placement_date` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `child_id` (`child_id`),
+  CONSTRAINT `adoption_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `families` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -60,17 +63,16 @@ CREATE TABLE `families` (
   `occupation` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-); 
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `medicalrecords` (
+CREATE TABLE `donations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `child_id` int(11) DEFAULT NULL,
-  `record_date` date DEFAULT NULL,
-  `details` text DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `child_id` (`child_id`),
-  CONSTRAINT `medicalrecords_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`)
-); 
+  `name` varchar(100) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `purpose` varchar(255) NOT NULL,
+  `donation_date` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `staff` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -80,4 +82,12 @@ CREATE TABLE `staff` (
   `certifications` text DEFAULT NULL,
   `gender` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) 
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE Staff
+ADD COLUMN username VARCHAR(255) NOT NULL UNIQUE,
+ADD COLUMN password VARCHAR(255) NOT NULL;
+
+-- Truncate the tables in the ChildCareCenter database
+
+
