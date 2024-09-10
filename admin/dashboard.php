@@ -1,5 +1,5 @@
 <?php
-include 'connections/db_connect.php';
+include '../connections/db_connect.php';
 
 // Fetch data for the bar chart
 function fetchAgeDistribution()
@@ -45,9 +45,38 @@ $childrenCount = fetchCount('Children');
 $medicalHistoryCount = fetchCount('MedicalRecords');
 $activitiesCount = fetchCount('DailyActivities');
 $adoptionCount = fetchCount('Adoption');
+$staffCount = fetchCount('Staff');
+
+// Fetch Families and Donations count
 $familiesCount = fetchCount('Families');
 $donationsCount = fetchCount('Donations');
+
+// Search for a name in multiple tables
+$search_results = '';
+if (isset($_GET['search'])) {
+    $search_name = $_GET['search'];
+    $search_query = "SELECT 'Children' AS source, full_name AS name FROM Children WHERE full_name LIKE ?
+                     UNION ALL
+                     SELECT 'Staff' AS source, name FROM Staff WHERE name LIKE ?";
+
+    $stmt = $db_connect->prepare($search_query);
+    $search_term = '%' . $search_name . '%';
+    $stmt->bind_param("ss", $search_term, $search_term);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $search_results .= "<p>Found in " . htmlspecialchars($row['source']) . ": " . htmlspecialchars($row['name']) . "</p>";
+        }
+    } else {
+        $search_results = "<p>No results found for '" . htmlspecialchars($search_name) . "'</p>";
+    }
+    $stmt->close();
+}
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -55,13 +84,18 @@ $donationsCount = fetchCount('Donations');
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+
         .card {
             display: flex;
             align-items: center;
@@ -79,9 +113,7 @@ $donationsCount = fetchCount('Donations');
         .card-icon {
             font-size: 2.5rem;
             margin-right: 20px;
-            /* Gap between icon and text */
             color: black;
-            /* Change icon color */
         }
 
         .card-content {
@@ -98,8 +130,6 @@ $donationsCount = fetchCount('Donations');
         .card-content p {
             margin: 0;
             font-size: 1.4rem;
-            /* margin-top: 5px; */
-            /* Adds a gap between the name and the number */
         }
 
         #ageDistributionChart {
@@ -127,6 +157,10 @@ $donationsCount = fetchCount('Donations');
             align-items: flex-start;
         }
 
+        .dashboard-header {
+            margin-bottom: 20px;
+        }
+
         @media (max-width: 768px) {
             #ageDistributionChart {
                 height: 400px;
@@ -135,22 +169,49 @@ $donationsCount = fetchCount('Donations');
             .dashboard-sections {
                 flex-direction: column;
             }
+
+            .dashboard-header .search-form {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 
 <body>
-    <?php include 'sidebar.php'; ?>
+    <?php include '../admin_sidebar.php'; ?>
 
     <main>
-        <div class="container">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 mb-3 border-bottom">
-                <h1 class="h4">Dashboard</h1>
+        <div class="container mt-2">
+            <!-- Dashboard Header and Search Form -->
+            <div class="row align-items-center mb-3 border-bottom">
+                <div class="col-md-6">
+                    <h1 class="h4">Dashboard</h1>
+                </div>
+                <div class="col-md-6 d-flex justify-content-end pb-3">
+                    <form action="" method="GET" class="search-form">
+                        <input type="text" class="form-control me-2" name="search" placeholder="Search by Name" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" required>
+                        <button class="btn btn-outline-primary" type="submit">Search</button>
+                    </form>
+                </div>
             </div>
 
+            <!-- Display Search Results -->
+            <?php if (!empty($search_results)): ?>
+                <div class="container mt-4">
+                    <h5>Search Results for "<?php echo htmlspecialchars($_GET['search']); ?>"</h5>
+                    <div>
+                        <?php echo $search_results; ?>
+                    </div>
+                </div>
+            <?php elseif (isset($_GET['search'])): ?>
+                <div class="container mt-4">
+                    <p>No results found for "<?php echo htmlspecialchars($_GET['search']); ?>".</p>
+                </div>
+            <?php endif; ?>
             <div class="dashboard-container">
                 <div class="col-md-6">
                     <div class="row">
+                        <!-- Dashboard Cards -->
                         <div class="col-md-4 mb-3">
                             <div class="card bg-light">
                                 <i class="fas fa-child card-icon"></i>
@@ -162,10 +223,10 @@ $donationsCount = fetchCount('Donations');
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="card bg-light">
-                                <i class="fas fa-file-medical card-icon"></i>
+                                <i class="fas fa-user-tie card-icon"></i>
                                 <div class="card-content">
-                                    <h4>Medical History</h4>
-                                    <p><?php echo $medicalHistoryCount; ?></p>
+                                    <h4>Staff</h4>
+                                    <p><?php echo $staffCount; ?></p>
                                 </div>
                             </div>
                         </div>
@@ -187,6 +248,7 @@ $donationsCount = fetchCount('Donations');
                                 </div>
                             </div>
                         </div>
+                        <!-- Dashboard Cards -->
                         <div class="col-md-4 mb-3">
                             <div class="card bg-light">
                                 <i class="fas fa-users card-icon"></i>
@@ -205,25 +267,25 @@ $donationsCount = fetchCount('Donations');
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
-
+                <!-- Action Buttons -->
                 <div class="vertical-divider"></div>
-
-                <div class="col-md-6 me-2">
-                    <div class="btn-grid me-5">
-                        <a href="view_children.php" class="btn btn-primary btn-card text-center">Children</a>
-                        <a href="view_medicalhistory.php" class="btn btn-secondary btn-card">Medical History</a>
-                        <a href="view_dailyactivties.php" class="btn btn-info btn-card">Daily Activities</a>
-                        <a href="view_educational.php" class="btn btn-warning btn-card text-center">Educational Progress</a>
-                        <a href="view_donations.php" class="btn btn-danger btn-card text-center">Donations</a>
-                        <a href="view_families.php" class="btn btn-success btn-card">Families</a>
-                        <a href="view_adoption.php" class="btn btn-info btn-card">Adoptions</a>
+                <div class="col-md-5">
+                    <div class="btn-grid">
+                        <a href="view_children.php" class="btn btn-primary">Manage Children</a>
+                        <a href="view_medicalhistory.php" class="btn btn-secondary">Manage Medical History</a>
+                        <a href="view_dailyactivties.php" class="btn btn-success">Manage Activities</a>
+                        <a href="view_adoption.php" class="btn btn-info">Manage Adoption</a>
+                        <a href="view_families.php" class="btn btn-warning">Manage Families</a>
+                        <a href="view.s" class="btn btn-danger">Manage Donations</a>
                     </div>
                 </div>
             </div>
 
-            <div class="row mt-3">
+            <!-- Age Distribution Chart -->
+            <div class="row">
                 <div class="col-md-12">
                     <canvas id="ageDistributionChart"></canvas>
                 </div>
@@ -233,31 +295,29 @@ $donationsCount = fetchCount('Donations');
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var ctxAge = document.getElementById('ageDistributionChart').getContext('2d');
-            var ageData = <?php echo json_encode(array_values($ageData)); ?>;
-            var ageLabels = <?php echo json_encode(array_keys($ageData)); ?>;
-            var ageDistributionChart = new Chart(ctxAge, {
+            const ctx = document.getElementById('ageDistributionChart').getContext('2d');
+            const ageData = <?php echo json_encode(array_values($ageData)); ?>;
+            const ageLabels = <?php echo json_encode(array_keys($ageData)); ?>;
+            new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ageLabels,
                     datasets: [{
                         label: 'Number of Children',
                         data: ageData,
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1
                     }]
                 },
                 options: {
-                    responsive: true,
                     scales: {
                         y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
+                            beginAtZero: true
                         }
-                    }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
                 }
             });
         });

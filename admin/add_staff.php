@@ -1,5 +1,5 @@
 <?php
-include 'connections/db_connect.php';
+include '../connections/db_connect.php';
 
 // Initialize message variable
 $message = '';
@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $certifications = trim($_POST["certifications"]);
 
     // Check for duplicate record
-    $stmt = $db_connect->prepare("SELECT * FROM Staff WHERE name = ? AND contact_info = ?");
+    $stmt = $db_connect->prepare("SELECT * FROM Staff WHERE full_name = ? AND contact_info = ?");
     $stmt->bind_param("ss", $name, $contact_info);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -23,8 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "Record already exists!";
         $alert_class = "alert-danger";
     } else {
-        // Prepare and bind
-        $stmt = $db_connect->prepare("INSERT INTO Staff (name, contact_info, role, certifications) VALUES (?, ?, ?, ?)");
+        // Prepare and bind for insertion
+        $stmt = $db_connect->prepare("INSERT INTO Staff (full_name, contact_info, role, certifications) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $name, $contact_info, $role, $certifications);
 
         // Execute and check if the record was added successfully
@@ -47,18 +47,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../style.css">
     <title>Staff</title>
 </head>
 
 <body>
-    <?php include 'sidebar.php'; ?>
+    <?php include '../admin_sidebar.php'; ?>
     <main>
         <div class="container">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 mb-3 border-bottom">
-                <h1 class="h4">Staff</h1>
+                <h1 class="h4">Add Staff Member</h1>
             </div>
 
             <?php if (!empty($message)): ?>
@@ -73,16 +73,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" class="form-control" id="floatingName" name="name" placeholder="Name" required>
                     <label for="floatingName">Name</label>
                 </div>
-                <div class="form-floating mb-3 mt-3">
+                <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingContactInfo" name="contact_info" placeholder="Contact Information" required>
                     <label for="floatingContactInfo">Contact Information</label>
                 </div>
-                <div class="form-floating mb-3 mt-3">
+                <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingRole" name="role" placeholder="Role" required>
                     <label for="floatingRole">Role</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <textarea class="form-control" id="certifications" name="certifications" rows="10" placeholder="Certifications" required></textarea>
+                    <textarea class="form-control" id="certifications" name="certifications" placeholder="Certifications" required></textarea>
                     <label for="certifications">Certifications</label>
                 </div>
                 <button type="submit" class="btn btn-outline-primary mt-1">Save Record</button>

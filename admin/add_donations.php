@@ -1,52 +1,32 @@
 <?php
-include 'connections/db_connect.php';
+include '../connections/db_connect.php';
 
-// Initialize message variable
+// Initialize message variables
 $message = '';
 $alert_class = '';
 
-// Retrieve record ID from URL
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+// Handle form submission for inserting a new donation record
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = trim($_POST["name"]);
+    $amount = trim($_POST["amount"]);
+    $purpose = trim($_POST["purpose"]);
+    $donation_date = $_POST["donation_date"];
 
-// Fetch existing record details
-if ($id > 0) {
-    $stmt = $db_connect->prepare("SELECT * FROM Donations WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $record = $result->fetch_assoc();
+    // Prepare and bind for insert
+    $stmt = $db_connect->prepare("INSERT INTO Donations (name, amount, purpose, donation_date) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $name, $amount, $purpose, $donation_date);
+
+    // Execute and check if the record was added successfully
+    if ($stmt->execute()) {
+        $message = "Donation record added successfully";
+        $alert_class = "alert-success";
+    } else {
+        $message = "Error: " . $stmt->error;
+        $alert_class = "alert-danger";
+    }
+
     $stmt->close();
-
-    if (!$record) {
-        die("Record not found.");
-    }
-
-    // Handle form submission
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $name = trim($_POST["name"]);
-        $amount = trim($_POST["amount"]);
-        $purpose = trim($_POST["purpose"]);
-        $donation_date = $_POST["donation_date"];
-
-        // Prepare and bind
-        $stmt = $db_connect->prepare("UPDATE Donations SET name = ?, amount = ?, purpose = ?, donation_date = ? WHERE id = ?");
-        $stmt->bind_param("ssssi", $name, $amount, $purpose, $donation_date, $id);
-
-        // Execute and check if the record was updated successfully
-        if ($stmt->execute()) {
-            $message = "Record updated successfully";
-            $alert_class = "alert-success";
-        } else {
-            $message = "Error: " . $stmt->error;
-            $alert_class = "alert-danger";
-        }
-
-        $stmt->close();
-    }
-
     $db_connect->close();
-} else {
-    die("Invalid ID.");
 }
 ?>
 <!DOCTYPE html>
@@ -55,18 +35,18 @@ if ($id > 0) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
-    <title>Update Donation Record</title>
+    <title>Add Donation Record</title>
 </head>
 
 <body>
-    <?php include 'sidebar.php'; ?>
+    <?php include '../admin_sidebar.php'; ?>
     <main>
         <div class="container">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 mb-3 border-bottom">
-                <h1 class="h4">Update Donation Record</h1>
+                <h1 class="h4">Add Donation Record</h1>
             </div>
 
             <?php if (!empty($message)): ?>
@@ -76,30 +56,31 @@ if ($id > 0) {
                 </div>
             <?php endif; ?>
 
+            <!-- Insert form for a new donation record -->
             <form action="" method="post" class="form-floating border-success p-3 shadow-lg needs-validation text-bg-light rounded-4" novalidate>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingName" name="name" value="<?php echo htmlspecialchars($record['name']); ?>" placeholder="Name" required>
+                    <input type="text" class="form-control" id="floatingName" name="name" placeholder="Name" required>
                     <label for="floatingName">Name</label>
                     <div class="invalid-feedback">
                         Please provide a name.
                     </div>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingAmount" name="amount" value="<?php echo htmlspecialchars($record['amount']); ?>" placeholder="Amount" required>
+                    <input type="text" class="form-control" id="floatingAmount" name="amount" placeholder="Amount" required>
                     <label for="floatingAmount">Amount</label>
                     <div class="invalid-feedback">
                         Please provide an amount.
                     </div>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingPurpose" name="purpose" value="<?php echo htmlspecialchars($record['purpose']); ?>" placeholder="Purpose" required>
+                    <input type="text" class="form-control" id="floatingPurpose" name="purpose" placeholder="Purpose" required>
                     <label for="floatingPurpose">Purpose</label>
                     <div class="invalid-feedback">
                         Please provide a purpose.
                     </div>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="date" class="form-control" id="donationDate" name="donation_date" value="<?php echo htmlspecialchars($record['donation_date']); ?>" required>
+                    <input type="date" class="form-control" id="donationDate" name="donation_date" required>
                     <label for="donationDate">Date of Donation</label>
                     <div class="invalid-feedback">
                         Please provide a valid date.

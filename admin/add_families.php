@@ -1,5 +1,5 @@
 <?php
-include 'connections/db_connect.php';
+include '../connections/db_connect.php';
 
 // Initialize message variable
 $message = '';
@@ -54,14 +54,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <title>Add Family Record</title>
 </head>
 
 <body>
-    <?php include 'sidebar.php'; ?>
+    <?php include '../admin_sidebar.php'; ?>
     <main>
         <div class="container">
             <h1 class="h4">Add Family Record</h1>
