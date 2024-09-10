@@ -18,14 +18,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Check for duplicate record
-    $stmt = $db_connect->prepare("SELECT * FROM Staff WHERE name = ? AND contact_info = ?");
-    $stmt->bind_param("ss", $name, $contact_info);
+    $stmt = $db_connect->prepare("SELECT * FROM Staff WHERE username = ?");
+    $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Duplicate record found
-        $message = "Record already exists!";
+        // Duplicate username found
+        $message = "Username already exists!";
         $alert_class = "alert-danger";
     } else {
         // Prepare and bind for insertion
