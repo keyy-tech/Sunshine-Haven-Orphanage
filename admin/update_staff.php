@@ -1,6 +1,7 @@
 <?php
 include '../connections/db_connect.php';
 
+
 // Initialize message variable
 $message = '';
 $alert_class = '';

@@ -1,4 +1,5 @@
 <?php
+include '../connections/db_protect.php';
 include '../connections/db_connect.php';
 
 // Fetch data from the database

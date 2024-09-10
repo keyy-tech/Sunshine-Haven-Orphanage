@@ -1,6 +1,7 @@
 <?php
 // Include the database connection file
 require_once '../connections/db_connect.php';
+include '../connections/db_protect.php';
 
 // Initialize variables
 $adoption = [];

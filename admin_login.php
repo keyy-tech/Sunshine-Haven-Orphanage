@@ -11,49 +11,25 @@ include 'connections/db_connect.php'; // Ensure this path is correct
 $message = ''; // Initialize message variable
 $alert_class = ''; // Initialize alert class variable
 
+// Default admin credentials
+$admin_username = 'admin';
+$admin_password = 'admin123'; // For security, consider hashing this in a real scenario
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
-    if ($db_connect) {
-        // Prepare and execute query to fetch the user record
-        $stmt = $db_connect->prepare("SELECT password FROM Staff WHERE username = ?");
-        if (!$stmt) {
-            die("Prepare failed: " . $db_connect->error);
-        }
+    // Check if the provided credentials match the default ones
+    if ($username === $admin_username && $password === $admin_password) {
+        $_SESSION['admin_logged_in'] = true; // Use admin_logged_in for consistency
 
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $stmt->store_result();
-
-        // Check if the user exists
-        if ($stmt->num_rows > 0) {
-            $stmt->bind_result($hashed_password);
-            $stmt->fetch();
-
-            // Verify the password
-            if (password_verify($password, $hashed_password)) {
-                $_SESSION['staff_logged_in'] = true; // Use staff_logged_in for consistency
-
-                // Redirect to the dashboard
-                header("Location: users/dashboard.php");
-                exit();
-            } else {
-                $message = "Invalid password.";
-                $alert_class = "alert-danger";
-            }
-        } else {
-            $message = "Invalid username.";
-            $alert_class = "alert-danger";
-        }
-
-        $stmt->close();
+        // Redirect to the admin dashboard
+        header("Location: admin/dashboard.php");
+        exit();
     } else {
-        $message = "Database connection failed.";
+        $message = "Invalid username or password.";
         $alert_class = "alert-danger";
     }
-
-    $db_connect->close();
 }
 ?>
 <!DOCTYPE html>
@@ -64,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/bootstrap.bundle.min.js"></script>
-    <title>Login</title>
+    <title>Admin Login</title>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -88,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <div class="form-container">
-        <h3 class="text-center">Login</h3>
+        <h3 class="text-center">Admin Login</h3>
         <p class="text-center pb-1 mt-0">Sunshine Haven Orphanage</p>
         <?php if (!empty($message)): ?>
             <div class="alert <?php echo $alert_class; ?> alert-dismissible fade show" role="alert">

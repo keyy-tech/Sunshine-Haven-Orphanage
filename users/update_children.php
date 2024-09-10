@@ -1,6 +1,6 @@
 <?php
 include '../connections/db_connect.php';
-
+include '../connections/db_protect.php';
 // Initialize variables
 $message = '';
 $alert_class = 'alert-success';

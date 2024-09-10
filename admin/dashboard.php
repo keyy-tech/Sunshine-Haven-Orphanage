@@ -1,5 +1,10 @@
 <?php
 include '../connections/db_connect.php';
+include '../.connections/access_control.php'; // Path to the access control file
+
+// Check access for admin
+checkAdminAccess();
+
 
 // Fetch data for the bar chart
 function fetchAgeDistribution()
@@ -185,7 +190,7 @@ if (isset($_GET['search'])) {
             <!-- Dashboard Header and Search Form -->
             <div class="row align-items-center mb-3 border-bottom">
                 <div class="col-md-6">
-                    <h1 class="h4">Dashboard</h1>
+                    <h1 class="h4">Admin Dashboard</h1>
                 </div>
                 <div class="col-md-6 d-flex justify-content-end pb-3">
                     <form action="" method="GET" class="search-form">

@@ -1,5 +1,10 @@
 <?php
 include '../connections/db_connect.php';
+include '../.connections/access_control.php'; // Path to the access control file
+
+// Check access for admin
+checkAdminAccess();
+
 
 // Fetch data from the database
 $query = "SELECT m.id, c.full_name, m.record_date, m.details

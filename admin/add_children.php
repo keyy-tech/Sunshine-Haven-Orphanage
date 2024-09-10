@@ -1,5 +1,10 @@
 <?php
 include '../connections/db_connect.php';
+include '../.connections/access_control.php'; // Path to the access control file
+
+// Check access for admin
+checkAdminAccess();
+
 
 // Initialize message variable
 $message = '';
@@ -104,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
                 <div class="mb-3">
-                   <!--  <label for="special_needs">Special Needs</label> -->
+                    <!--  <label for="special_needs">Special Needs</label> -->
                     <textarea class="form-control" id="special_needs" name="special_needs" rows="10" placeholder="Special Needs"></textarea>
 
                 </div>
