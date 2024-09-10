@@ -1,20 +1,22 @@
 <?php
+include '../connections/db_protect.php';
+// Include database connection
 include '../connections/db_connect.php';
 
 // Fetch data for the bar chart
 function fetchAgeDistribution()
 {
     global $db_connect;
-    $query = "SELECT 
-                CASE 
-                    WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 0 AND 5 THEN '0-5'
-                    WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 6 AND 10 THEN '6-10'
-                    WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 11 AND 15 THEN '11-15'
-                    WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 16 AND 18 THEN '16-18'
-                END AS age_group,
-                COUNT(*) AS count
-              FROM Children
-              GROUP BY age_group";
+    $query = "SELECT
+CASE
+WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 0 AND 5 THEN '0-5'
+WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 6 AND 10 THEN '6-10'
+WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 11 AND 15 THEN '11-15'
+WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 16 AND 18 THEN '16-18'
+END AS age_group,
+COUNT(*) AS count
+FROM Children
+GROUP BY age_group";
     $result = mysqli_query($db_connect, $query);
     if (!$result) {
         die("Error in query: " . mysqli_error($db_connect));
@@ -79,9 +81,7 @@ $donationsCount = fetchCount('Donations');
         .card-icon {
             font-size: 2.5rem;
             margin-right: 20px;
-            /* Gap between icon and text */
             color: black;
-            /* Change icon color */
         }
 
         .card-content {
@@ -98,8 +98,6 @@ $donationsCount = fetchCount('Donations');
         .card-content p {
             margin: 0;
             font-size: 1.4rem;
-            /* margin-top: 5px; */
-            /* Adds a gap between the name and the number */
         }
 
         #ageDistributionChart {

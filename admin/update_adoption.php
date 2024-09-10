@@ -1,6 +1,11 @@
 <?php
 // Include the database connection file
 require_once '../connections/db_connect.php';
+include '../.connections/access_control.php'; // Path to the access control file
+
+// Check access for admin
+checkAdminAccess();
+
 
 // Initialize variables
 $adoption = [];

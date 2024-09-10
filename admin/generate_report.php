@@ -1,5 +1,10 @@
 <?php
 include '../connections/db_connect.php';
+include '../.connections/access_control.php'; // Path to the access control file
+
+// Check access for admin
+checkAdminAccess();
+
 
 // Get the child ID from the URL parameter
 $child_id = isset($_GET['child_id']) ? intval($_GET['child_id']) : 0;

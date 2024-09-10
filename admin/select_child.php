@@ -1,5 +1,10 @@
 <?php
 include '../connections/db_connect.php';
+include '../.connections/access_control.php'; // Path to the access control file
+
+// Check access for admin
+checkAdminAccess();
+
 
 // Fetch all children records for the dropdown
 $children_query = "SELECT id, full_name FROM Children ORDER BY full_name";

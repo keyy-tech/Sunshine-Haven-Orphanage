@@ -1,5 +1,6 @@
 <?php
 include '../connections/db_connect.php';
+include '../connections/db_protect.php';
 
 // Fetch data from the database
 $query = "SELECT m.id, c.full_name, m.record_date, m.details
