@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
     <title>Children</title>
 </head>
 
@@ -105,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mb-3">
                     <textarea class="form-control" id="special_needs" name="special_needs" rows="10" placeholder="Special Needs"></textarea>
-                    <label for="special_needs">Special Needs</label>
+               <!--      <label for="special_needs">Special Needs</label> -->
                 </div>
                 <button type="submit" class="btn btn-outline-primary mt-1">Save Record</button>
                 <a href="view_children.php" class="btn btn-outline-secondary mt-1 ms-3">View Records</a>

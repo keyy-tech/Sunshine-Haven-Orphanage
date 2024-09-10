@@ -104,8 +104,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
                 <div class="mb-3">
+                   <!--  <label for="special_needs">Special Needs</label> -->
                     <textarea class="form-control" id="special_needs" name="special_needs" rows="10" placeholder="Special Needs"></textarea>
-                    <label for="special_needs">Special Needs</label>
+
                 </div>
                 <button type="submit" class="btn btn-outline-primary mt-1">Save Record</button>
                 <a href="view_children.php" class="btn btn-outline-secondary mt-1 ms-3">View Records</a>

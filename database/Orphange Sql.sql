@@ -11,7 +11,7 @@ CREATE TABLE `adoption` (
   PRIMARY KEY (`id`),
   KEY `child_id` (`child_id`),
   CONSTRAINT `adoption_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`)
-) 
+);
 
 CREATE TABLE `children` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -21,7 +21,7 @@ CREATE TABLE `children` (
   `nationality` varchar(50) DEFAULT NULL,
   `special_needs` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-)
+);
 
 CREATE TABLE `dailyactivities` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -31,7 +31,7 @@ CREATE TABLE `dailyactivities` (
   PRIMARY KEY (`id`),
   KEY `child_id` (`child_id`),
   CONSTRAINT `dailyactivities_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`)
-)
+);
 
 CREATE TABLE `donations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -40,7 +40,7 @@ CREATE TABLE `donations` (
   `purpose` varchar(255) NOT NULL,
   `donation_date` date NOT NULL,
   PRIMARY KEY (`id`)
-)
+);
 CREATE TABLE `educationalprogress` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `child_id` int(11) DEFAULT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE `educationalprogress` (
   PRIMARY KEY (`id`),
   KEY `child_id` (`child_id`),
   CONSTRAINT `educationalprogress_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`)
-)
+);
 
 CREATE TABLE `families` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -60,7 +60,7 @@ CREATE TABLE `families` (
   `occupation` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) 
+); 
 
 CREATE TABLE `medicalrecords` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -70,7 +70,7 @@ CREATE TABLE `medicalrecords` (
   PRIMARY KEY (`id`),
   KEY `child_id` (`child_id`),
   CONSTRAINT `medicalrecords_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`)
-) 
+); 
 
 CREATE TABLE `staff` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
