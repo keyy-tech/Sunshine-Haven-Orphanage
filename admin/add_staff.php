@@ -11,32 +11,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $contact_info = trim($_POST["contact_info"]);
     $role = trim($_POST["role"]);
     $certifications = trim($_POST["certifications"]);
+    $username = trim($_POST["username"]);
+    $password = trim($_POST["password"]);
+    $confirm_password = trim($_POST["confirm_password"]);
 
-    // Check for duplicate record
-    $stmt = $db_connect->prepare("SELECT * FROM Staff WHERE full_name = ? AND contact_info = ?");
-    $stmt->bind_param("ss", $name, $contact_info);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        // Duplicate record found
-        $message = "Record already exists!";
+    // Validate password confirmation
+    if ($password !== $confirm_password) {
+        $message = "Passwords do not match!";
         $alert_class = "alert-danger";
     } else {
-        // Prepare and bind for insertion
-        $stmt = $db_connect->prepare("INSERT INTO Staff (full_name, contact_info, role, certifications) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $name, $contact_info, $role, $certifications);
+        // Hash the password for security
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // Execute and check if the record was added successfully
-        if ($stmt->execute()) {
-            $message = "New staff member added successfully";
-            $alert_class = "alert-success";
-        } else {
-            $message = "Error: " . $stmt->error;
+        // Check for duplicate record
+        $stmt = $db_connect->prepare("SELECT * FROM Staff WHERE name = ? AND contact_info = ?");
+        $stmt->bind_param("ss", $name, $contact_info);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            // Duplicate record found
+            $message = "Record already exists!";
             $alert_class = "alert-danger";
-        }
+        } else {
+            // Prepare and bind for insertion
+            $stmt = $db_connect->prepare("INSERT INTO Staff (name, contact_info, role, certifications, username, password) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssss", $name, $contact_info, $role, $certifications, $username, $hashed_password);
 
-        $stmt->close();
+            // Execute and check if the record was added successfully
+            if ($stmt->execute()) {
+                $message = "New staff member added successfully";
+                $alert_class = "alert-success";
+            } else {
+                $message = "Error: " . $stmt->error;
+                $alert_class = "alert-danger";
+            }
+
+            $stmt->close();
+        }
     }
     $db_connect->close();
 }
@@ -85,6 +97,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <textarea class="form-control" id="certifications" name="certifications" placeholder="Certifications" required></textarea>
                     <label for="certifications">Certifications</label>
                 </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingUsername" name="username" placeholder="Username" required>
+                    <label for="floatingUsername">Username</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required>
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingConfirmPassword" name="confirm_password" placeholder="Confirm Password" required>
+                    <label for="floatingConfirmPassword">Confirm Password</label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="showPasswordToggle" onclick="togglePasswordVisibility()">
+                    <label class="form-check-label" for="showPasswordToggle">Show Password</label>
+                </div>
                 <button type="submit" class="btn btn-outline-primary mt-1">Save Record</button>
                 <a href="view_staff.php" class="btn btn-outline-secondary mt-1 ms-3">View Records</a>
             </form>
@@ -102,10 +130,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         event.preventDefault();
                         event.stopPropagation();
                     }
+
+                    // Client-side validation for password confirmation
+                    const password = document.getElementById('floatingPassword').value;
+                    const confirmPassword = document.getElementById('floatingConfirmPassword').value;
+
+                    if (password !== confirmPassword) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        alert('Passwords do not match!');
+                    }
+
                     form.classList.add('was-validated');
                 }, false);
             });
     })();
+
+    // Function to toggle password visibility
+    function togglePasswordVisibility() {
+        var passwordField = document.getElementById('floatingPassword');
+        var confirmPasswordField = document.getElementById('floatingConfirmPassword');
+        var showPasswordToggle = document.getElementById('showPasswordToggle');
+
+        if (showPasswordToggle.checked) {
+            passwordField.type = 'text';
+            confirmPasswordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
+            confirmPasswordField.type = 'password';
+        }
+    }
 </script>
 
 </html>

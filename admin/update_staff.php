@@ -7,6 +7,8 @@ $alert_class = '';
 
 // Initialize variables for the form
 $name = '';
+$username = '';
+$password = '';
 $contact_info = '';
 $role = '';
 $certifications = '';
@@ -17,14 +19,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
     $id = isset($_POST["id"]) ? intval($_POST["id"]) : 0;
     $name = trim($_POST["name"]);
+    $username = trim($_POST["username"]);
+    $password = trim($_POST["password"]);
     $contact_info = trim($_POST["contact_info"]);
     $role = trim($_POST["role"]);
     $certifications = trim($_POST["certifications"]);
 
     if ($id) {
         // Update record
-        $stmt = $db_connect->prepare("UPDATE Staff SET name = ?, contact_info = ?, role = ?, certifications = ? WHERE id = ?");
-        $stmt->bind_param("ssssi", $name, $contact_info, $role, $certifications, $id);
+        if (!empty($password)) {
+            // Update with password
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $db_connect->prepare("UPDATE Staff SET name = ?, username = ?, password = ?, contact_info = ?, role = ?, certifications = ? WHERE id = ?");
+            $stmt->bind_param("ssssssi", $name, $username, $hashed_password, $contact_info, $role, $certifications, $id);
+        } else {
+            // Update without password
+            $stmt = $db_connect->prepare("UPDATE Staff SET name = ?, username = ?, contact_info = ?, role = ?, certifications = ? WHERE id = ?");
+            $stmt->bind_param("sssssi", $name, $username, $contact_info, $role, $certifications, $id);
+        }
+
         if ($stmt->execute()) {
             $message = "Staff record updated successfully.";
             $alert_class = "alert-success";
@@ -35,8 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
     } else {
         // Insert record
-        $stmt = $db_connect->prepare("INSERT INTO Staff (name, contact_info, role, certifications) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $name, $contact_info, $role, $certifications);
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $db_connect->prepare("INSERT INTO Staff (name, username, password, contact_info, role, certifications) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $name, $username, $hashed_password, $contact_info, $role, $certifications);
         if ($stmt->execute()) {
             $message = "Staff record added successfully.";
             $alert_class = "alert-success";
@@ -62,6 +76,7 @@ if (isset($_GET['id']) && !$id) {
     if ($result->num_rows > 0) {
         $staff_data = $result->fetch_assoc();
         $name = $staff_data['name'];
+        $username = $staff_data['username'];
         $contact_info = $staff_data['contact_info'];
         $role = $staff_data['role'];
         $certifications = $staff_data['certifications'];
@@ -107,6 +122,17 @@ if (isset($_GET['id']) && !$id) {
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingName" name="name" placeholder="Full Name" value="<?php echo htmlspecialchars($name); ?>" required>
                     <label for="floatingName">Full Name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingUsername" name="username" placeholder="Username" value="<?php echo htmlspecialchars($username); ?>" required>
+                    <label for="floatingUsername">Username</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                    <?php if ($update_mode): ?>
+                        <small class="text-muted">Leave blank to keep the current password.</small>
+                    <?php endif; ?>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="floatingContactInfo" name="contact_info" placeholder="Contact Info" value="<?php echo htmlspecialchars($contact_info); ?>" required>
