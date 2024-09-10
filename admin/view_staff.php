@@ -28,8 +28,9 @@ $result = $db_connect->query("SELECT * FROM Staff");
             <table class="table table-default table-striped table-hover border">
                 <thead>
                     <tr>
-                        <th scope="col">ID</th>
+                        <th scope="col">Staff ID</th>
                         <th scope="col">Full Name</th>
+                        <th scope="col">Username</th>
                         <th scope="col">Contact Info</th>
                         <th scope="col">Role</th>
                         <th scope="col">Certifications</th>
@@ -44,6 +45,7 @@ $result = $db_connect->query("SELECT * FROM Staff");
                         while ($row = $result->fetch_assoc()) {
                             $id = $row['id'];
                             $name = htmlspecialchars($row['name']);
+                            $username = htmlspecialchars($row['username']);
                             $contact_info = htmlspecialchars($row['contact_info']);
                             $role = htmlspecialchars($row['role']);
                             $certifications = htmlspecialchars($row['certifications']);
@@ -51,6 +53,7 @@ $result = $db_connect->query("SELECT * FROM Staff");
                             <tr>
                                 <td><?php echo $id; ?></td>
                                 <td><?php echo $name; ?></td>
+                                <td><?php echo $username; ?></td>
                                 <td><?php echo $contact_info; ?></td>
                                 <td><?php echo $role; ?></td>
                                 <td><?php echo $certifications; ?></td>
@@ -82,7 +85,7 @@ $result = $db_connect->query("SELECT * FROM Staff");
                     <?php
                         }
                     } else {
-                        echo "<tr><td colspan='6' class='text-center'>No records found</td></tr>";
+                        echo "<tr><td colspan='7' class='text-center'>No records found</td></tr>";
                     }
                     ?>
                 </tbody>
