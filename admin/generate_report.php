@@ -1,10 +1,6 @@
 <?php
 include '../connections/db_connect.php';
-include '../.connections/access_control.php'; // Path to the access control file
-
-// Check access for admin
-checkAdminAccess();
-
+include '../connections/access_control.php'; // Path to the access control file
 
 // Get the child ID from the URL parameter
 $child_id = isset($_GET['child_id']) ? intval($_GET['child_id']) : 0;
@@ -94,7 +90,7 @@ $report_result = $stmt->get_result();
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
         }
 
@@ -116,108 +112,105 @@ $report_result = $stmt->get_result();
             </div>
 
             <?php if ($report_result->num_rows > 0): ?>
-                <?php
-                while ($row = $report_result->fetch_assoc()):
-                ?>
-                    <div class="report-section">
-                        <h5 class="mb-4">Child ID: <?php echo htmlspecialchars($row['id']); ?></h5>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>Name:</strong> <?php echo htmlspecialchars($row['full_name']); ?></p>
-                                <p><strong>Date of Birth:</strong> <?php echo htmlspecialchars($row['dob']); ?></p>
-                                <p><strong>Gender:</strong> <?php echo htmlspecialchars($row['gender']); ?></p>
-                                <p><strong>Nationality:</strong> <?php echo htmlspecialchars($row['nationality']); ?></p>
-                                <p><strong>Special Needs:</strong> <?php echo htmlspecialchars($row['special_needs']); ?></p>
-                            </div>
-                        </div>
-
-                        <div class="grid-container">
-                            <?php if (!empty($row['activity'])): ?>
-                                <div class="report-section">
-                                    <h5>Activities</h5>
-                                    <table class="table report-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Activity</th>
-                                                <th>Time</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><?php echo htmlspecialchars($row['activity']); ?></td>
-                                                <td><?php echo htmlspecialchars($row['activity_time']); ?></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if (!empty($row['medical_details'])): ?>
-                                <div class="report-section">
-                                    <h5>Medical Records</h5>
-                                    <table class="table report-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Details</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><?php echo htmlspecialchars($row['record_date']); ?></td>
-                                                <td><?php echo htmlspecialchars($row['medical_details']); ?></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if (!empty($row['grade_level'])): ?>
-                                <div class="report-section">
-                                    <h5>Educational Progress</h5>
-                                    <table class="table report-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Grade Level</th>
-                                                <th>School Attendance</th>
-                                                <th>Academic Achievements</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><?php echo htmlspecialchars($row['grade_level']); ?></td>
-                                                <td><?php echo htmlspecialchars($row['school_attendance']); ?></td>
-                                                <td><?php echo htmlspecialchars($row['academic_achievements']); ?></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if (!empty($row['adoption_status'])): ?>
-                                <div class="report-section">
-                                    <h5>Adoption</h5>
-                                    <table class="table report-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Status</th>
-                                                <th>Date of Placement</th>
-                                                <th>Family</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><?php echo htmlspecialchars($row['adoption_status']); ?></td>
-                                                <td><?php echo htmlspecialchars($row['date_of_placement']); ?></td>
-                                                <td><?php echo htmlspecialchars($row['family_name']); ?></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            <?php endif; ?>
+                <?php $row = $report_result->fetch_assoc(); ?>
+                <div class="report-section">
+                    <h5 class="mb-4">Child ID: <?php echo htmlspecialchars($row['id']); ?></h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Name:</strong> <?php echo htmlspecialchars($row['full_name']); ?></p>
+                            <p><strong>Date of Birth:</strong> <?php echo htmlspecialchars($row['dob']); ?></p>
+                            <p><strong>Gender:</strong> <?php echo htmlspecialchars($row['gender']); ?></p>
+                            <p><strong>Nationality:</strong> <?php echo htmlspecialchars($row['nationality']); ?></p>
+                            <p><strong>Special Needs:</strong> <?php echo htmlspecialchars($row['special_needs']); ?></p>
                         </div>
                     </div>
-                <?php endwhile; ?>
+
+                    <div class="grid-container">
+                        <?php if (!empty($row['activity'])): ?>
+                            <div class="report-section">
+                                <h5>Activities</h5>
+                                <table class="table report-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Activity</th>
+                                            <th>Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($row['activity']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['activity_time']); ?></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (!empty($row['medical_details'])): ?>
+                            <div class="report-section">
+                                <h5>Medical Records</h5>
+                                <table class="table report-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($row['record_date']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['medical_details']); ?></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (!empty($row['grade_level'])): ?>
+                            <div class="report-section">
+                                <h5>Educational Progress</h5>
+                                <table class="table report-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Grade Level</th>
+                                            <th>School Attendance</th>
+                                            <th>Academic Achievements</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($row['grade_level']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['school_attendance']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['academic_achievements']); ?></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (!empty($row['adoption_status'])): ?>
+                            <div class="report-section">
+                                <h5>Adoption</h5>
+                                <table class="table report-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th>Date of Placement</th>
+                                            <th>Family</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($row['adoption_status']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['date_of_placement']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['family_name']); ?></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
             <?php else: ?>
                 <p>No records found.</p>
             <?php endif; ?>

@@ -1,6 +1,7 @@
 <?php
 include '../connections/db_connect.php';
 
+include '../connections/access_control.php'; // Path to the access control file
 
 // Initialize message variable
 $message = '';

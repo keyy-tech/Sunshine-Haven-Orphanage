@@ -1,9 +1,6 @@
 <?php
 include '../connections/db_connect.php';
-include '../.connections/access_control.php'; // Path to the access control file
-
-// Check access for admin
-checkAdminAccess();
+include '../connections/access_control.php'; // Path to the access control file
 
 
 // Fetch all staff records from the Staff table

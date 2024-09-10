@@ -1,7 +1,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
     <header class="navbar">
         <a class="navbar-brand fs-5 text-white ps-5" href="#">Child Care Center </a>
-        <a class="nav-link text-white pe-5" href="logout.php">
+        <a class="nav-link text-white pe-5" href="?logout=true">
             <i class="bi bi-door-closed"></i>
             Sign out
         </a>
@@ -78,7 +78,7 @@
                     </a>
                 </li> -->
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="logout.php">
+                    <a class="nav-link text-white" href="?logout=true">
                         <i class="bi bi-door-closed me-2"></i>
                         Sign out
                     </a>

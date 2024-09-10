@@ -1,9 +1,7 @@
 <?php
 include '../connections/db_connect.php';
-include '../.connections/access_control.php'; // Path to the access control file
+include '../connections/access_control.php'; // Path to the access control file
 
-// Check access for admin
-checkAdminAccess();
 
 
 // Initialize message variable
