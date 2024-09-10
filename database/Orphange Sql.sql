@@ -1,54 +1,83 @@
-CREATE DATABASE ChildCareCenter;
+CREATE DATABASE childcarecenter;
 
-USE ChildCareCenter;
+USE childcharecenter;
+CREATE TABLE `adoption` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `child_id` int(11) DEFAULT NULL,
+  `family_id` int(11) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `date_of_placement` date DEFAULT NULL,
+  `placement_date` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `child_id` (`child_id`),
+  CONSTRAINT `adoption_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`)
+) 
 
-CREATE TABLE Children (
-    id INT PRIMARY KEY,
-    full_name VARCHAR(100),
-    dob DATE,
-    gender CHAR(1),
-    nationality VARCHAR(50),
-    special_needs TEXT
-);
+CREATE TABLE `children` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `full_name` varchar(100) DEFAULT NULL,
+  `dob` date DEFAULT NULL,
+  `gender` char(1) DEFAULT NULL,
+  `nationality` varchar(50) DEFAULT NULL,
+  `special_needs` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)
 
-CREATE TABLE Staff (
-    id INT PRIMARY KEY,
-    name VARCHAR(100),
-    contact_info VARCHAR(100),
-    role VARCHAR(50),
-    certifications TEXT
-);
+CREATE TABLE `dailyactivities` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `child_id` int(11) DEFAULT NULL,
+  `activity` varchar(100) DEFAULT NULL,
+  `time` time DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `child_id` (`child_id`),
+  CONSTRAINT `dailyactivities_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`)
+)
 
-CREATE TABLE DailyActivities (
-    id INT PRIMARY KEY,
-    child_id INT,
-    activity VARCHAR(100),
-    time TIME,
-    FOREIGN KEY (child_id) REFERENCES Children(id)
-);
+CREATE TABLE `donations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `purpose` varchar(255) NOT NULL,
+  `donation_date` date NOT NULL,
+  PRIMARY KEY (`id`)
+)
+CREATE TABLE `educationalprogress` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `child_id` int(11) DEFAULT NULL,
+  `grade_level` int(11) DEFAULT NULL,
+  `school_attendance` int(11) DEFAULT NULL,
+  `academic_achievements` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `child_id` (`child_id`),
+  CONSTRAINT `educationalprogress_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`)
+)
 
-CREATE TABLE MedicalRecords (
-    id INT PRIMARY KEY,
-    child_id INT,
-    record_date DATE,
-    details TEXT,
-    FOREIGN KEY (child_id) REFERENCES Children(id)
-);
+CREATE TABLE `families` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `contact_info` varchar(255) NOT NULL,
+  `parent_name` varchar(255) NOT NULL,
+  `occupation` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) 
 
-CREATE TABLE EducationalProgress (
-    id INT PRIMARY KEY,
-    child_id INT,
-    grade_level INT,
-    school_attendance INT,
-    academic_achievements TEXT,
-    FOREIGN KEY (child_id) REFERENCES Children(id)
-);
+CREATE TABLE `medicalrecords` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `child_id` int(11) DEFAULT NULL,
+  `record_date` date DEFAULT NULL,
+  `details` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `child_id` (`child_id`),
+  CONSTRAINT `medicalrecords_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`)
+) 
 
-CREATE TABLE Adoption (
-    id INT PRIMARY KEY,
-    child_id INT,
-    family_id INT,
-    status VARCHAR(50),
-    FOREIGN KEY (child_id) REFERENCES Children(id)
-);
-ALTER TABLE Adoption ADD COLUMN date_of_placement DATE;
+CREATE TABLE `staff` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `contact_info` varchar(100) DEFAULT NULL,
+  `role` varchar(50) DEFAULT NULL,
+  `certifications` text DEFAULT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) 
