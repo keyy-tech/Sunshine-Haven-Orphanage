@@ -11,6 +11,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $contact_info = trim($_POST["contact_info"]);
     $role = trim($_POST["role"]);
     $certifications = trim($_POST["certifications"]);
+    $username = trim($_POST["username"]);
+    $password = trim($_POST["password"]);
+
+    // Hash the password for security
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Check for duplicate record
     $stmt = $db_connect->prepare("SELECT * FROM Staff WHERE name = ? AND contact_info = ?");
@@ -24,8 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $alert_class = "alert-danger";
     } else {
         // Prepare and bind for insertion
-        $stmt = $db_connect->prepare("INSERT INTO Staff (name, contact_info, role, certifications) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $name, $contact_info, $role, $certifications);
+        $stmt = $db_connect->prepare("INSERT INTO Staff (name, contact_info, role, certifications, username, password) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $name, $contact_info, $role, $certifications, $username, $hashed_password);
 
         // Execute and check if the record was added successfully
         if ($stmt->execute()) {
@@ -84,6 +89,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-floating mb-3">
                     <textarea class="form-control" id="certifications" name="certifications" placeholder="Certifications" required></textarea>
                     <label for="certifications">Certifications</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingUsername" name="username" placeholder="Username" required>
+                    <label for="floatingUsername">Username</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required>
+                    <label for="floatingPassword">Password</label>
                 </div>
                 <button type="submit" class="btn btn-outline-primary mt-1">Save Record</button>
                 <a href="view_staff.php" class="btn btn-outline-secondary mt-1 ms-3">View Records</a>
