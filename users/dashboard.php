@@ -64,6 +64,11 @@ $donationsCount = fetchCount('Donations');
     <title>Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+
         .card {
             display: flex;
             align-items: center;
@@ -125,6 +130,10 @@ $donationsCount = fetchCount('Donations');
             align-items: flex-start;
         }
 
+        .dashboard-header {
+            margin-bottom: 20px;
+        }
+
         @media (max-width: 768px) {
             #ageDistributionChart {
                 height: 400px;
@@ -132,6 +141,10 @@ $donationsCount = fetchCount('Donations');
 
             .dashboard-sections {
                 flex-direction: column;
+            }
+
+            .dashboard-header .search-form {
+                justify-content: center;
             }
         }
     </style>

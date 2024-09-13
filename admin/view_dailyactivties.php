@@ -70,7 +70,7 @@ if (!$result) {
                             <td><?php echo htmlspecialchars($ACTIVITY); ?></td>
                             <td><?php echo htmlspecialchars($TIME); ?></td>
                             <td>
-                                <a href="update_dailyactivities.php?id=<?php echo urlencode($ID); ?>" class="btn btn-outline-primary">Update</a>
+                                <a href="update_dailyactivties.php?id=<?php echo urlencode($ID); ?>" class="btn btn-outline-primary">Update</a>
 
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?php echo $ID; ?>">

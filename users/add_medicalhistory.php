@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // Check if record already exists
         $stmt = $db_connect->prepare("SELECT * FROM MedicalRecords WHERE child_id = ? AND record_date = ? AND (id != ? OR ? IS NULL)");
-        $stmt->bind_param("isi", $child_id, $record_date, $id, $id);
+        $stmt->bind_param("ssss", $child_id, $record_date, $id, $id);
         $stmt->execute();
         $result = $stmt->get_result();
 

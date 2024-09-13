@@ -41,7 +41,7 @@ CREATE TABLE `educationalprogress` (
   PRIMARY KEY (`id`),
   KEY `child_id` (`child_id`),
   CONSTRAINT `educationalprogress_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ;
 
 CREATE TABLE `adoption` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -53,7 +53,7 @@ CREATE TABLE `adoption` (
   PRIMARY KEY (`id`),
   KEY `child_id` (`child_id`),
   CONSTRAINT `adoption_ibfk_1` FOREIGN KEY (`child_id`) REFERENCES `children` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ;
 
 CREATE TABLE `families` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -63,7 +63,7 @@ CREATE TABLE `families` (
   `occupation` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 CREATE TABLE `donations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -72,7 +72,7 @@ CREATE TABLE `donations` (
   `purpose` varchar(255) NOT NULL,
   `donation_date` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 CREATE TABLE `staff` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -82,7 +82,7 @@ CREATE TABLE `staff` (
   `certifications` text DEFAULT NULL,
   `gender` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 ALTER TABLE Staff
 ADD COLUMN username VARCHAR(255) NOT NULL UNIQUE,

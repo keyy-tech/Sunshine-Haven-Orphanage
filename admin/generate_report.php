@@ -10,35 +10,45 @@ if ($child_id <= 0) {
     exit();
 }
 
-// Fetch child details and related records
-$report_query = "
-    SELECT c.id, c.full_name, c.dob, c.gender, c.nationality, c.special_needs,
-           d.activity, d.time AS activity_time,
-           m.record_date, m.details AS medical_details,
-           e.grade_level, e.school_attendance, e.academic_achievements,
-           a.status AS adoption_status, a.date_of_placement,
-           f.name AS family_name
-    FROM Children c
-    LEFT JOIN DailyActivities d ON c.id = d.child_id
-    LEFT JOIN MedicalRecords m ON c.id = m.child_id
-    LEFT JOIN EducationalProgress e ON c.id = e.child_id
-    LEFT JOIN Adoption a ON c.id = a.child_id
-    LEFT JOIN Families f ON a.family_id = f.id
-    WHERE c.id = ?
-    ORDER BY d.time, m.record_date, e.grade_level
-";
-
-$stmt = $db_connect->prepare($report_query);
-if (!$stmt) {
-    die("Prepare failed: " . $db_connect->error);
-}
-
+// Fetch child details
+$child_query = "SELECT id, full_name, dob, gender, nationality, special_needs FROM Children WHERE id = ?";
+$stmt = $db_connect->prepare($child_query);
 $stmt->bind_param("i", $child_id);
-if (!$stmt->execute()) {
-    die("Execute failed: " . $stmt->error);
-}
+$stmt->execute();
+$child_result = $stmt->get_result();
+$child_details = $child_result->fetch_assoc();
 
-$report_result = $stmt->get_result();
+// Fetch Daily Activities
+$activities_query = "SELECT activity, time AS activity_time FROM DailyActivities WHERE child_id = ?";
+$stmt = $db_connect->prepare($activities_query);
+$stmt->bind_param("i", $child_id);
+$stmt->execute();
+$activities_result = $stmt->get_result();
+
+// Fetch Medical Records
+$medical_query = "SELECT record_date, details AS medical_details FROM MedicalRecords WHERE child_id = ?";
+$stmt = $db_connect->prepare($medical_query);
+$stmt->bind_param("i", $child_id);
+$stmt->execute();
+$medical_result = $stmt->get_result();
+
+// Fetch Educational Progress
+$education_query = "SELECT grade_level, school_attendance, academic_achievements FROM EducationalProgress WHERE child_id = ?";
+$stmt = $db_connect->prepare($education_query);
+$stmt->bind_param("i", $child_id);
+$stmt->execute();
+$education_result = $stmt->get_result();
+
+// Check for duplicates using an array
+$displayed_education_records = [];
+
+// Fetch Adoption Details
+$adoption_query = "SELECT a.status AS adoption_status, a.date_of_placement, f.name AS family_name 
+                   FROM Adoption a LEFT JOIN Families f ON a.family_id = f.id WHERE a.child_id = ?";
+$stmt = $db_connect->prepare($adoption_query);
+$stmt->bind_param("i", $child_id);
+$stmt->execute();
+$adoption_result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -111,111 +121,122 @@ $report_result = $stmt->get_result();
                 <p class="text-muted">Date: <?php echo date('Y-m-d'); ?></p>
             </div>
 
-            <?php if ($report_result->num_rows > 0): ?>
-                <?php $row = $report_result->fetch_assoc(); ?>
+            <?php if ($child_details): ?>
                 <div class="report-section">
-                    <h5 class="mb-4">Child ID: <?php echo htmlspecialchars($row['id']); ?></h5>
+                    <h5 class="mb-4">Child ID: <?php echo htmlspecialchars($child_details['id']); ?></h5>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>Name:</strong> <?php echo htmlspecialchars($row['full_name']); ?></p>
-                            <p><strong>Date of Birth:</strong> <?php echo htmlspecialchars($row['dob']); ?></p>
-                            <p><strong>Gender:</strong> <?php echo htmlspecialchars($row['gender']); ?></p>
-                            <p><strong>Nationality:</strong> <?php echo htmlspecialchars($row['nationality']); ?></p>
-                            <p><strong>Special Needs:</strong> <?php echo htmlspecialchars($row['special_needs']); ?></p>
+                            <p><strong>Name:</strong> <?php echo htmlspecialchars($child_details['full_name']); ?></p>
+                            <p><strong>Date of Birth:</strong> <?php echo htmlspecialchars($child_details['dob']); ?></p>
+                            <p><strong>Gender:</strong> <?php echo htmlspecialchars($child_details['gender']); ?></p>
+                            <p><strong>Nationality:</strong> <?php echo htmlspecialchars($child_details['nationality']); ?></p>
+                            <p><strong>Special Needs:</strong> <?php echo htmlspecialchars($child_details['special_needs']); ?></p>
                         </div>
                     </div>
+                </div>
 
-                    <div class="grid-container">
-                        <?php if (!empty($row['activity'])): ?>
-                            <div class="report-section">
-                                <h5>Activities</h5>
-                                <table class="table report-table">
-                                    <thead>
+                <div class="grid-container">
+                    <!-- Activities Section -->
+                    <?php if ($activities_result->num_rows > 0): ?>
+                        <div class="report-section">
+                            <h5>Activities</h5>
+                            <table class="table report-table">
+                                <thead>
+                                    <tr>
+                                        <th>Activity</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($activity = $activities_result->fetch_assoc()): ?>
                                         <tr>
-                                            <th>Activity</th>
-                                            <th>Time</th>
+                                            <td><?php echo htmlspecialchars($activity['activity']); ?></td>
+                                            <td><?php echo htmlspecialchars($activity['activity_time']); ?></td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($row['activity']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['activity_time']); ?></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <?php endif; ?>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
 
-                        <?php if (!empty($row['medical_details'])): ?>
-                            <div class="report-section">
-                                <h5>Medical Records</h5>
-                                <table class="table report-table">
-                                    <thead>
+                    <!-- Medical Records Section -->
+                    <?php if ($medical_result->num_rows > 0): ?>
+                        <div class="report-section">
+                            <h5>Medical Records</h5>
+                            <table class="table report-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($medical = $medical_result->fetch_assoc()): ?>
                                         <tr>
-                                            <th>Date</th>
-                                            <th>Details</th>
+                                            <td><?php echo htmlspecialchars($medical['record_date']); ?></td>
+                                            <td><?php echo htmlspecialchars($medical['medical_details']); ?></td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($row['record_date']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['medical_details']); ?></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <?php endif; ?>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
 
-                        <?php if (!empty($row['grade_level'])): ?>
-                            <div class="report-section">
-                                <h5>Educational Progress</h5>
-                                <table class="table report-table">
-                                    <thead>
+                    <!-- Educational Progress Section -->
+                    <?php if ($education_result->num_rows > 0): ?>
+                        <div class="report-section">
+                            <h5>Educational Progress</h5>
+                            <table class="table report-table">
+                                <thead>
+                                    <tr>
+                                        <th>Grade Level</th>
+                                        <th>School Attendance</th>
+                                        <th>Academic Achievements</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($education = $education_result->fetch_assoc()): ?>
                                         <tr>
-                                            <th>Grade Level</th>
-                                            <th>School Attendance</th>
-                                            <th>Academic Achievements</th>
+                                            <td><?php echo htmlspecialchars($education['grade_level']); ?></td>
+                                            <td><?php echo htmlspecialchars($education['school_attendance']); ?></td>
+                                            <td><?php echo htmlspecialchars($education['academic_achievements']); ?></td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($row['grade_level']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['school_attendance']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['academic_achievements']); ?></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <?php endif; ?>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
 
-                        <?php if (!empty($row['adoption_status'])): ?>
-                            <div class="report-section">
-                                <h5>Adoption</h5>
-                                <table class="table report-table">
-                                    <thead>
+                    <!-- Adoption Details Section -->
+                    <?php if ($adoption_result->num_rows > 0): ?>
+                        <div class="report-section">
+                            <h5>Adoption</h5>
+                            <table class="table report-table">
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Date of Placement</th>
+                                        <th>Family</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($adoption = $adoption_result->fetch_assoc()): ?>
                                         <tr>
-                                            <th>Status</th>
-                                            <th>Date of Placement</th>
-                                            <th>Family</th>
+                                            <td><?php echo htmlspecialchars($adoption['adoption_status']); ?></td>
+                                            <td><?php echo htmlspecialchars($adoption['date_of_placement']); ?></td>
+                                            <td><?php echo htmlspecialchars($adoption['family_name']); ?></td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($row['adoption_status']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['date_of_placement']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['family_name']); ?></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
                 </div>
             <?php else: ?>
-                <p>No records found.</p>
+                <p class="alert alert-danger">Child with ID <?php echo htmlspecialchars($child_id); ?> not found.</p>
             <?php endif; ?>
 
-            <a href="javascript:window.print()" class="btn btn-outline-primary btn-print">Print Report</a>
+            <button class="btn btn-primary btn-print" onclick="window.print()">Print Report</button>
         </div>
     </main>
 </body>

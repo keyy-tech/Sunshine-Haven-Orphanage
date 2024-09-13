@@ -37,17 +37,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<<<<<<< Updated upstream:users/update_donations.php
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="../js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../style.css">
-    <title>Update Donation Record</title>
-=======
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="style.css">
-    <title>Donations</title>
->>>>>>> Stashed changes:add_donations.php
+    <title>Update Donation Record</title>    
+   
 </head>
 
 <body>

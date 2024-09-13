@@ -6,7 +6,7 @@ include '../connections/access_control.php'; // Path to the access control file
 
 
 // Fetch data from the database
-$query = "SELECT id, name, contact_info FROM Families";
+$query = "SELECT id, name, contact_info,parent_name,occupation,address FROM Families";
 $result = mysqli_query($db_connect, $query);
 
 if (!$result) {
@@ -50,6 +50,7 @@ if (!$result) {
                         <th scope="col">Record ID</th>
                         <th scope="col">Family Name</th>
                         <th scope="col">Contact Info</th>
+                        <th scope="col">Details</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -59,6 +60,26 @@ if (!$result) {
                             <td><?php echo htmlspecialchars($row['id']); ?></td>
                             <td><?php echo htmlspecialchars($row['name']); ?></td>
                             <td><?php echo htmlspecialchars($row['contact_info']); ?></td>
+                            <td>
+                                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#detailsModal<?php echo $row['id']; ?>">
+                                    Details
+                                </button>
+                                <div class="modal fade" id="detailsModal<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="detailsModal<?php echo $row['id'];; ?>" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="detailsModal<?php echo $row['id']; ?>">Details</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Parent Name : </span> <?php echo htmlspecialchars($row['parent_name']); ?></p>
+                                                <p>Occupation : <?php echo htmlspecialchars($row['occupation']); ?></p>
+                                                <p> Address : <?php echo htmlspecialchars($row['address']); ?> </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                             <td>
                                 <a href="update_families.php?id=<?php echo urlencode($row['id']); ?>" class="btn btn-outline-primary">Update</a>
                                 <!-- Button trigger modal -->

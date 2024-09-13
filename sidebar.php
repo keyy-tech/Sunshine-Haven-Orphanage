@@ -82,7 +82,7 @@
                     </a>
                 </li> -->
                <li class="nav-item">
-                   <a class="nav-link text-white" href="?logout=true>
+                   <a class="nav-link text-white" href="?logout=true">
                        <i class=" bi bi-door-closed me-2"></i>
                        Sign out
                    </a>

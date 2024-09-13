@@ -283,7 +283,7 @@ if (isset($_GET['search'])) {
                         <a href="view_dailyactivties.php" class="btn btn-success">Manage Activities</a>
                         <a href="view_adoption.php" class="btn btn-info">Manage Adoption</a>
                         <a href="view_families.php" class="btn btn-warning">Manage Families</a>
-                        <a href="view.s" class="btn btn-danger">Manage Donations</a>
+                        <a href="view_donations.php" class="btn btn-danger">Manage Donations</a>
                     </div>
                 </div>
             </div>

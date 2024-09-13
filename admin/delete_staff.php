@@ -10,15 +10,17 @@ if (isset($_GET['id'])) {
     $stmt->bind_param("i", $id);
 
     if ($stmt->execute()) {
-        // If the record is deleted successfully, redirect to the view staff page
-        header("Location: view_staff.php?msg=deleted");
+        $message = "Record deleted successfully.";
     } else {
-        // Handle any errors that occurred during deletion
-        echo "Error deleting record: " . $stmt->error;
+        $message = "Error deleting record: " . $db_connect->error;
     }
 
     $stmt->close();
     $db_connect->close();
+
+    // Redirect with message
+    header("Location: view_staff.php?message=" . urlencode($message));
+    exit;
 } else {
-    echo "No ID specified for deletion.";
+    die("No ID specified for deletion.");
 }

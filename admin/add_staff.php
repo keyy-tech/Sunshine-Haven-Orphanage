@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Check for duplicate record
-        $stmt = $db_connect->prepare("SELECT * FROM Staff WHERE full_name = ? AND contact_info = ?");
+        $stmt = $db_connect->prepare("SELECT * FROM Staff WHERE name = ? AND contact_info = ?");
         $stmt->bind_param("ss", $name, $contact_info);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $alert_class = "alert-danger";
         } else {
             // Prepare and bind for insertion
-            $stmt = $db_connect->prepare("INSERT INTO Staff (full_name, contact_info, role, certifications, username, password) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt = $db_connect->prepare("INSERT INTO Staff (name, contact_info, role, certifications, username, password) VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->bind_param("ssssss", $name, $contact_info, $role, $certifications, $username, $hashed_password);
 
             // Execute and check if the record was added successfully

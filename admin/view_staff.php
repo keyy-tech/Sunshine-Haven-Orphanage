@@ -24,9 +24,16 @@ $result = $db_connect->query("SELECT * FROM Staff");
         <div class="container">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-1 mb-3 border-bottom">
                 <h1 class="h4">Staff Records</h1>
-                <a href="add_staff.php" class="btn btn-outline-success mb-3 mt-2">Add New Record</a>
-            </div>
 
+            </div>
+            <?php
+            if (isset($_GET['message'])) {
+                echo '<div class="alert alert-success" role="alert">';
+                echo htmlspecialchars($_GET['message']);
+                echo '</div>';
+            }
+            ?>
+            <a href="add_staff.php" class="btn btn-outline-success mb-3 mt-2">Add New Record</a>
             <table class="table table-default table-striped table-hover border">
                 <thead>
                     <tr>
@@ -61,8 +68,8 @@ $result = $db_connect->query("SELECT * FROM Staff");
                                 <td><?php echo $certifications; ?></td>
                                 <td>
                                     <!-- Update and Delete buttons -->
-                                    <a href="update_staff.php?id=<?php echo $id; ?>" class="btn btn-outline-primary btn-sm">Update</a>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal<?php echo $id; ?>">Delete</button>
+                                    <a href="update_staff.php?id=<?php echo $id; ?>" class="btn btn-outline-primary ">Update</a>
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?php echo $id; ?>">Delete</button>
 
                                     <!-- Delete Modal -->
                                     <div class="modal fade" id="deleteModal<?php echo $id; ?>" tabindex="-1" aria-labelledby="deleteModalLabel<?php echo $id; ?>" aria-hidden="true">
